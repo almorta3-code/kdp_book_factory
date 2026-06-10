@@ -13,10 +13,10 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 class Settings(BaseSettings):
     """Application settings loaded from environment variables and .env."""
 
-    openai_api_key: str | None = Field(default=None, alias="OPENAI_API_KEY")
-    model_text_planner: str = Field(default="gpt-5.5", alias="MODEL_TEXT_PLANNER")
-    model_text_fast: str = Field(default="gpt-5.4-mini", alias="MODEL_TEXT_FAST")
-    model_image: str = Field(default="gpt-image-2", alias="MODEL_IMAGE")
+    google_api_key: str | None = Field(default=None, alias="GOOGLE_API_KEY")
+    model_text_planner: str = Field(default="gemini-3.5-flash", alias="MODEL_TEXT_PLANNER")
+    model_text_fast: str = Field(default="gemini-3.5-flash", alias="MODEL_TEXT_FAST")
+    model_image: str = Field(default="gemini-3.1-flash-image", alias="MODEL_IMAGE")
     outputs_dir: Path = PROJECT_ROOT / "outputs"
 
     model_config = SettingsConfigDict(

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import base64
 import time
 from pathlib import Path
 
@@ -8,7 +7,7 @@ from PIL import Image, ImageDraw
 
 from src.compliance.provenance_engine import record_prompt, register_asset, update_project_provenance
 from src.config import get_settings
-from src.openai_client import get_openai_client
+from src.google_client import generate_image_file
 
 
 STYLE_PREFIX = (
@@ -45,23 +44,6 @@ def _save_placeholder_png(output_path: Path, label: str, prompt: str) -> Path:
     return output_path
 
 
-def _extract_image_bytes(response: object) -> bytes:
-    """Handle common OpenAI image response shapes without binding to one SDK version."""
-    data = getattr(response, "data", None)
-    if not data:
-        raise RuntimeError("OpenAI image response did not include image data.")
-
-    first_image = data[0]
-    b64_json = getattr(first_image, "b64_json", None)
-    if b64_json:
-        return base64.b64decode(b64_json)
-
-    if isinstance(first_image, dict) and first_image.get("b64_json"):
-        return base64.b64decode(first_image["b64_json"])
-
-    raise RuntimeError("OpenAI image response did not include base64 PNG data.")
-
-
 def _generate_image(
     prompt: str,
     output_path: str | Path,
@@ -87,20 +69,12 @@ def _generate_image(
         return output
 
     settings = get_settings()
-    client = get_openai_client()
     target_path.parent.mkdir(parents=True, exist_ok=True)
 
     last_error: Exception | None = None
     for attempt in range(retries + 1):
         try:
-            response = client.images.generate(
-                model=settings.model_image,
-                prompt=full_prompt,
-                size="1024x1024",
-                n=1,
-                response_format="b64_json",
-            )
-            target_path.write_bytes(_extract_image_bytes(response))
+            generate_image_file(settings.model_image, full_prompt, target_path)
             try:
                 record_prompt("image_generator", settings.model_image, full_prompt, f"Generated {asset_type} image")
                 register_asset(asset_type, full_prompt, target_path)
@@ -118,7 +92,7 @@ def _generate_image(
                 break
             time.sleep(1.5 * (attempt + 1))
 
-    raise RuntimeError(f"Image generation failed after {retries + 1} attempts: {last_error}")
+    raise RuntimeError(f"Gemini image generation failed after {retries + 1} attempts: {last_error}")
 
 
 def generate_character_image(prompt: str, output_path: str | Path, placeholder: bool = False) -> Path:

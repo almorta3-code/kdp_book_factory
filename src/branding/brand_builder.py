@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from src.compliance.provenance_engine import record_prompt
 from src.config import get_settings
-from src.openai_client import get_openai_client
+from src.google_client import generate_structured
 
 
 BRANDS_DIR = Path(__file__).resolve().parents[2] / "projects" / "brands"
@@ -80,41 +80,10 @@ def build_brand_profile(target_niche: str, age_range: str) -> BrandProfile:
     if len(cleaned_age) < 2:
         raise ValueError("Enter an age range.")
 
-    client = get_openai_client()
     settings = get_settings()
     system_prompt = _system_prompt()
     user_prompt = _user_prompt(cleaned_niche, cleaned_age)
-
-    responses_api = getattr(client, "responses", None)
-    if responses_api is not None and hasattr(responses_api, "parse"):
-        response = responses_api.parse(
-            model=settings.model_text_planner,
-            input=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            text_format=BrandProfile,
-        )
-        parsed = getattr(response, "output_parsed", None)
-        if parsed is None:
-            raise RuntimeError("OpenAI returned no parsed BrandProfile.")
-        try:
-            record_prompt("brand_builder", settings.model_text_planner, f"{system_prompt}\n\n{user_prompt}", f"Generated brand profile for {parsed.brand_name}")
-        except Exception:
-            pass
-        return parsed
-
-    completion = client.beta.chat.completions.parse(
-        model=settings.model_text_planner,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        response_format=BrandProfile,
-    )
-    parsed = completion.choices[0].message.parsed
-    if parsed is None:
-        raise RuntimeError("OpenAI returned no parsed BrandProfile.")
+    parsed = generate_structured(settings.model_text_planner, system_prompt, user_prompt, BrandProfile)
     try:
         record_prompt("brand_builder", settings.model_text_planner, f"{system_prompt}\n\n{user_prompt}", f"Generated brand profile for {parsed.brand_name}")
     except Exception:

@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from src.branding.brand_builder import BrandProfile
 from src.config import get_settings
-from src.openai_client import get_openai_client
+from src.google_client import generate_structured
 from src.schemas.book import BookBlueprint
 
 
@@ -141,37 +141,10 @@ Required output:
 
 def generate_marketing_assets(blueprint: BookBlueprint, brand: BrandProfile) -> MarketingAssets:
     """Generate a structured marketing asset pack from a book blueprint and brand profile."""
-    client = get_openai_client()
+    settings = get_settings()
     system_prompt = _system_prompt()
     user_prompt = _user_prompt(blueprint, brand)
-
-    responses_api = getattr(client, "responses", None)
-    if responses_api is not None and hasattr(responses_api, "parse"):
-        response = responses_api.parse(
-            model=get_settings().model_text_planner,
-            input=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            text_format=MarketingAssets,
-        )
-        parsed = getattr(response, "output_parsed", None)
-        if parsed is None:
-            raise RuntimeError("OpenAI returned no parsed MarketingAssets.")
-        return parsed
-
-    completion = client.beta.chat.completions.parse(
-        model=get_settings().model_text_planner,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        response_format=MarketingAssets,
-    )
-    parsed = completion.choices[0].message.parsed
-    if parsed is None:
-        raise RuntimeError("OpenAI returned no parsed MarketingAssets.")
-    return parsed
+    return generate_structured(settings.model_text_planner, system_prompt, user_prompt, MarketingAssets)
 
 
 def _slugify(text: str) -> str:

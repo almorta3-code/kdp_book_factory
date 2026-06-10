@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 from src.branding.brand_builder import BRANDS_DIR
 from src.compliance.provenance_engine import record_prompt
 from src.config import get_settings
-from src.openai_client import get_openai_client
+from src.google_client import generate_structured
 
 
 class CharacterProfile(BaseModel):
@@ -101,41 +101,10 @@ def build_character_profile(target_niche: str, brand_name: str, audience: str) -
     if len(cleaned_audience) < 3:
         raise ValueError("Enter an audience.")
 
-    client = get_openai_client()
     settings = get_settings()
     system_prompt = _system_prompt()
     user_prompt = _user_prompt(cleaned_niche, cleaned_brand, cleaned_audience)
-
-    responses_api = getattr(client, "responses", None)
-    if responses_api is not None and hasattr(responses_api, "parse"):
-        response = responses_api.parse(
-            model=settings.model_text_planner,
-            input=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            text_format=CharacterProfile,
-        )
-        parsed = getattr(response, "output_parsed", None)
-        if parsed is None:
-            raise RuntimeError("OpenAI returned no parsed CharacterProfile.")
-        try:
-            record_prompt("character_engine", settings.model_text_planner, f"{system_prompt}\n\n{user_prompt}", f"Generated character profile for {parsed.name}")
-        except Exception:
-            pass
-        return parsed
-
-    completion = client.beta.chat.completions.parse(
-        model=settings.model_text_planner,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        response_format=CharacterProfile,
-    )
-    parsed = completion.choices[0].message.parsed
-    if parsed is None:
-        raise RuntimeError("OpenAI returned no parsed CharacterProfile.")
+    parsed = generate_structured(settings.model_text_planner, system_prompt, user_prompt, CharacterProfile)
     try:
         record_prompt("character_engine", settings.model_text_planner, f"{system_prompt}\n\n{user_prompt}", f"Generated character profile for {parsed.name}")
     except Exception:

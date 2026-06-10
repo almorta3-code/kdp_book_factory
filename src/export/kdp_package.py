@@ -12,7 +12,7 @@ from reportlab.pdfgen.canvas import Canvas
 
 from src.compliance.provenance_engine import export_compliance_package, record_output_file, record_prompt, update_project_provenance
 from src.config import get_settings
-from src.openai_client import get_openai_client
+from src.google_client import generate_structured
 from src.schemas.book import AnimalUnit, BookBlueprint, KDPMetadata
 
 
@@ -55,52 +55,11 @@ Return a polished listing package with an HTML-safe description, exactly 7 keywo
 
 
 def generate_kdp_metadata(blueprint: BookBlueprint, content_units: list[AnimalUnit]) -> KDPMetadata:
-    """Generate KDP listing metadata using OpenAI structured output."""
+    """Generate KDP listing metadata using Gemini structured output."""
     settings = get_settings()
-    client = get_openai_client()
     system_prompt = _build_metadata_system_prompt()
     user_prompt = _build_metadata_user_prompt(blueprint, content_units)
-
-    responses_api = getattr(client, "responses", None)
-    if responses_api is not None and hasattr(responses_api, "parse"):
-        response = responses_api.parse(
-            model=settings.model_text_fast,
-            input=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            text_format=KDPMetadata,
-        )
-        parsed = getattr(response, "output_parsed", None)
-        if parsed is None:
-            raise RuntimeError("OpenAI returned no parsed KDPMetadata.")
-        try:
-            record_prompt(
-                "kdp_metadata_generator",
-                settings.model_text_fast,
-                f"{system_prompt}\n\n{user_prompt}",
-                f"Generated KDP metadata for {parsed.title}",
-            )
-            update_project_provenance(
-                book_title=parsed.title,
-                model_used=settings.model_text_fast,
-                generation_event="Generated KDP metadata",
-            )
-        except Exception:
-            pass
-        return parsed
-
-    completion = client.beta.chat.completions.parse(
-        model=settings.model_text_fast,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        response_format=KDPMetadata,
-    )
-    parsed = completion.choices[0].message.parsed
-    if parsed is None:
-        raise RuntimeError("OpenAI returned no parsed KDPMetadata.")
+    parsed = generate_structured(settings.model_text_fast, system_prompt, user_prompt, KDPMetadata)
     try:
         record_prompt(
             "kdp_metadata_generator",

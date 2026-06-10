@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from src.config import get_settings
 from src.compliance.provenance_engine import record_prompt, update_project_provenance
-from src.openai_client import get_openai_client
+from src.google_client import generate_structured
 from src.schemas.book import BookBlueprint, BookRequest
 
 
@@ -54,54 +54,11 @@ Blueprint requirements:
 
 
 def _parse_structured_response(request: BookRequest) -> BookBlueprint:
-    """Call OpenAI structured outputs and parse directly into BookBlueprint."""
+    """Call Gemini structured outputs and parse directly into BookBlueprint."""
     settings = get_settings()
-    client = get_openai_client()
     system_prompt = _build_system_prompt()
     user_prompt = _build_user_prompt(request)
-
-    responses_api = getattr(client, "responses", None)
-    if responses_api is not None and hasattr(responses_api, "parse"):
-        response = responses_api.parse(
-            model=settings.model_text_planner,
-            input=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            text_format=BookBlueprint,
-        )
-        parsed = getattr(response, "output_parsed", None)
-        if parsed is None:
-            raise RuntimeError("OpenAI returned no parsed BookBlueprint.")
-        try:
-            record_prompt(
-                "blueprint_generator",
-                settings.model_text_planner,
-                f"{system_prompt}\n\n{user_prompt}",
-                f"Generated blueprint for {parsed.title}",
-            )
-            update_project_provenance(
-                project_name=request.theme,
-                book_title=parsed.title,
-                language=request.language,
-                model_used=settings.model_text_planner,
-                generation_event="Generated book blueprint",
-            )
-        except Exception:
-            pass
-        return parsed
-
-    completion = client.beta.chat.completions.parse(
-        model=settings.model_text_planner,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        response_format=BookBlueprint,
-    )
-    parsed = completion.choices[0].message.parsed
-    if parsed is None:
-        raise RuntimeError("OpenAI returned no parsed BookBlueprint.")
+    parsed = generate_structured(settings.model_text_planner, system_prompt, user_prompt, BookBlueprint)
     try:
         record_prompt(
             "blueprint_generator",

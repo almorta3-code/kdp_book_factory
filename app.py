@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import json
 from pathlib import Path
@@ -264,7 +264,7 @@ def render_sidebar() -> str:
     st.sidebar.caption(f"Planner: {settings.model_text_planner}")
     st.sidebar.caption(f"Fast text: {settings.model_text_fast}")
     st.sidebar.caption(f"Image: {settings.model_image}")
-    if settings.openai_api_key:
+    if settings.google_api_key:
         st.sidebar.success("API key loaded")
     else:
         st.sidebar.warning("API key missing")
@@ -468,8 +468,8 @@ def page_research_center() -> None:
         )
 
         if st.button("Analyze Niche", type="primary"):
-            if not get_settings().openai_api_key:
-                st.error("Add OPENAI_API_KEY in .env before running niche research.")
+            if not get_settings().google_api_key:
+                st.error("Add google_api_key in .env before running niche research.")
                 return
             try:
                 update = progress_action("Analyzing niche", 3)
@@ -491,8 +491,8 @@ def page_research_center() -> None:
         )
 
         if st.button("Rank Opportunities", type="primary"):
-            if not get_settings().openai_api_key:
-                st.error("Add OPENAI_API_KEY in .env before ranking opportunities.")
+            if not get_settings().google_api_key:
+                st.error("Add google_api_key in .env before ranking opportunities.")
                 return
             try:
                 niches = [line.strip() for line in niche_list.splitlines() if line.strip()]
@@ -524,8 +524,8 @@ def page_brand_builder() -> None:
         )
 
     if st.button("Build Brand Profile", type="primary"):
-        if not get_settings().openai_api_key:
-            st.error("Add OPENAI_API_KEY in .env before building a brand profile.")
+        if not get_settings().google_api_key:
+            st.error("Add google_api_key in .env before building a brand profile.")
             return
         try:
             update = progress_action("Building brand", 3)
@@ -556,8 +556,8 @@ def page_character_manager() -> None:
         audience = st.text_input("Audience", value="Children ages 5-8")
 
     if st.button("Generate Mascot Character", type="primary"):
-        if not get_settings().openai_api_key:
-            st.error("Add OPENAI_API_KEY in .env before creating a character profile.")
+        if not get_settings().google_api_key:
+            st.error("Add google_api_key in .env before creating a character profile.")
             return
         try:
             update = progress_action("Creating character", 3)
@@ -644,8 +644,8 @@ def page_translation_center() -> None:
     )
 
     if st.button("Generate Language Packs", type="primary"):
-        if not get_settings().openai_api_key:
-            st.error("Add OPENAI_API_KEY in .env before translating projects.")
+        if not get_settings().google_api_key:
+            st.error("Add google_api_key in .env before translating projects.")
             return
         if not selected_languages:
             st.error("Choose at least one language.")
@@ -930,8 +930,8 @@ def page_generate_blueprint() -> None:
 
     st.json(json.loads(request.model_dump_json()))
     if st.button("Generate Book Blueprint", type="primary"):
-        if not get_settings().openai_api_key:
-            st.error("Add OPENAI_API_KEY in .env before generating a blueprint.")
+        if not get_settings().google_api_key:
+            st.error("Add google_api_key in .env before generating a blueprint.")
             return
         try:
             update = progress_action("Generating blueprint", 3)
@@ -958,8 +958,8 @@ def page_generate_content() -> None:
         return
 
     if st.button("Generate Book Content", type="primary"):
-        if not get_settings().openai_api_key:
-            st.error("Add OPENAI_API_KEY in .env before generating content.")
+        if not get_settings().google_api_key:
+            st.error("Add google_api_key in .env before generating content.")
             return
         try:
             update = progress_action("Generating content", 3)
@@ -1044,8 +1044,8 @@ def page_cover_lab() -> None:
         submitted = st.form_submit_button("Generate Cover Concepts", type="primary")
 
     if submitted:
-        if not get_settings().openai_api_key:
-            st.error("Add OPENAI_API_KEY in .env before generating cover concepts.")
+        if not get_settings().google_api_key:
+            st.error("Add google_api_key in .env before generating cover concepts.")
             return
         try:
             update = progress_action("Generating cover concepts", 3)
@@ -1092,8 +1092,8 @@ def page_generate_images() -> None:
         st.info(f"Cover art will use selected Cover Lab concept: #{selected_cover.rank}: {selected_cover.concept_name}")
 
     if st.button("Generate Visual Assets", type="primary"):
-        if not placeholder and not get_settings().openai_api_key:
-            st.error("Add OPENAI_API_KEY or use placeholder images.")
+        if not placeholder and not get_settings().google_api_key:
+            st.error("Add google_api_key or use placeholder images.")
             return
         try:
             update = progress_action("Generating images", 3)
@@ -1171,8 +1171,8 @@ def page_export_package() -> None:
 
     st.write("This creates the KDP upload folder and a zip file with listing helper files.")
     if st.button("Export KDP Upload Package", type="primary"):
-        if not get_settings().openai_api_key:
-            st.error("Add OPENAI_API_KEY in .env before generating KDP metadata.")
+        if not get_settings().google_api_key:
+            st.error("Add google_api_key in .env before generating KDP metadata.")
             return
         try:
             update = progress_action("Exporting package", 4)
@@ -1231,8 +1231,8 @@ def page_teacher_resources() -> None:
         return
 
     if st.button("Export Teacher Pack", type="primary"):
-        if not get_settings().openai_api_key:
-            st.error("Add OPENAI_API_KEY in .env before generating teacher resources.")
+        if not get_settings().google_api_key:
+            st.error("Add google_api_key in .env before generating teacher resources.")
             return
         try:
             update = progress_action("Creating teacher pack", 4)
@@ -1270,8 +1270,8 @@ def page_homeschool_center() -> None:
     st.write("- progress tracker")
 
     if st.button("Export Homeschool Pack", type="primary"):
-        if not get_settings().openai_api_key:
-            st.error("Add OPENAI_API_KEY in .env before generating homeschool resources.")
+        if not get_settings().google_api_key:
+            st.error("Add google_api_key in .env before generating homeschool resources.")
             return
         try:
             update = progress_action("Creating homeschool pack", 4)
@@ -1351,8 +1351,8 @@ def page_marketing_center() -> None:
     st.write("- email launch sequence")
 
     if st.button("Generate Marketing Assets", type="primary"):
-        if not get_settings().openai_api_key:
-            st.error("Add OPENAI_API_KEY in .env before generating marketing assets.")
+        if not get_settings().google_api_key:
+            st.error("Add google_api_key in .env before generating marketing assets.")
             return
         try:
             update = progress_action("Generating marketing assets", 4)
@@ -1415,3 +1415,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

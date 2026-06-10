@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from src.config import get_settings
-from src.openai_client import get_openai_client
+from src.google_client import generate_text
 from src.schemas.book import BookBlueprintRequest
 
 
@@ -35,11 +35,4 @@ Do not claim that final pages, images, puzzles, or PDFs have been created.
 def generate_book_blueprint(request: BookBlueprintRequest) -> str:
     """Call the planner model and return the blueprint text."""
     settings = get_settings()
-    client = get_openai_client()
-
-    response = client.responses.create(
-        model=settings.model_text_planner,
-        input=build_blueprint_prompt(request),
-    )
-
-    return response.output_text
+    return generate_text(settings.model_text_planner, "", build_blueprint_prompt(request))

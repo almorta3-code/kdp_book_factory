@@ -6,7 +6,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from src.config import get_settings
-from src.openai_client import get_openai_client
+from src.google_client import generate_structured
 from src.schemas.book import AnimalUnit, BookBlueprint
 
 
@@ -162,37 +162,10 @@ def translate_project(
     if not content_units:
         raise ValueError("Content units are required before translation.")
 
-    client = get_openai_client()
+    settings = get_settings()
     system_prompt = _system_prompt()
     user_prompt = _user_prompt(blueprint, content_units, language)
-
-    responses_api = getattr(client, "responses", None)
-    if responses_api is not None and hasattr(responses_api, "parse"):
-        response = responses_api.parse(
-            model=get_settings().model_text_fast,
-            input=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            text_format=LanguagePack,
-        )
-        parsed = getattr(response, "output_parsed", None)
-        if parsed is None:
-            raise RuntimeError("OpenAI returned no parsed LanguagePack.")
-        return parsed
-
-    completion = client.beta.chat.completions.parse(
-        model=get_settings().model_text_fast,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        response_format=LanguagePack,
-    )
-    parsed = completion.choices[0].message.parsed
-    if parsed is None:
-        raise RuntimeError("OpenAI returned no parsed LanguagePack.")
-    return parsed
+    return generate_structured(settings.model_text_fast, system_prompt, user_prompt, LanguagePack)
 
 
 def _language_filename(language: str) -> str:

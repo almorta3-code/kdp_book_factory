@@ -1,4 +1,4 @@
-# KDP Activity Book Factory
+﻿# KDP Activity Book Factory
 
 ## Vision
 Build a production-grade AI-powered KDP Activity Book Generator that creates:
@@ -35,18 +35,18 @@ Generate assets separately (text, images, activities) and assemble with Python. 
 
 ---
 
-# Codex Prompt 1 — Project Setup
+# Codex Prompt 1 â€” Project Setup
 
 You are building a production-quality Python app called KDP Activity Book Factory.
 
 Goal:
-Create a local web app that generates complete KDP-ready children's activity workbooks using OpenAI API.
+Create a local web app that generates complete KDP-ready children's activity workbooks using Google Gemini API.
 
 Tech stack:
 - Python 3.11+
 - Streamlit frontend
 - FastAPI-style modular backend structure if needed
-- OpenAI API
+- Google Gemini API
 - Pydantic models
 - ReportLab for PDF layout
 - Pillow for image processing
@@ -62,7 +62,7 @@ kdp_book_factory/
   README.md
   src/
     config.py
-    openai_client.py
+    google_client.py
     schemas/
     generators/
     layout/
@@ -75,7 +75,7 @@ kdp_book_factory/
   tests/
 
 Requirements:
-1. Add environment loading for OPENAI_API_KEY.
+1. Add environment loading for GOOGLE_API_KEY.
 2. Add settings for model_text_planner, model_text_fast, model_image.
 3. Default models:
    - planner: gpt-5.5
@@ -89,14 +89,14 @@ Requirements:
    - color mode
    - activity types
    - style direction
-5. Add a “Generate Book Blueprint” button.
+5. Add a â€œGenerate Book Blueprintâ€ button.
 6. No fake final generation yet. Just setup clean architecture.
 7. Add clear comments.
 8. Make the app run with: streamlit run app.py
 
 ---
 
-# Codex Prompt 2 — Data Schemas
+# Codex Prompt 2 â€” Data Schemas
 
 Add Pydantic schemas for the full book system.
 
@@ -113,14 +113,14 @@ Add example JSON files in /templates/examples.
 
 ---
 
-# Codex Prompt 3 — Blueprint Generator
+# Codex Prompt 3 â€” Blueprint Generator
 
 Create src/generators/blueprint_generator.py.
 
 Function:
 generate_book_blueprint(request: BookRequest) -> BookBlueprint
 
-Use OpenAI structured outputs with the planner model.
+Use Gemini structured outputs with the planner model.
 
 The prompt should make the model act as:
 - KDP niche strategist
@@ -140,7 +140,7 @@ Save blueprint.json.
 
 ---
 
-# Codex Prompt 4 — Content Generator
+# Codex Prompt 4 â€” Content Generator
 
 Create src/generators/content_generator.py.
 
@@ -162,7 +162,7 @@ Save content_units.json.
 
 ---
 
-# Codex Prompt 5 — Activity Logic
+# Codex Prompt 5 â€” Activity Logic
 
 Create:
 
@@ -179,7 +179,7 @@ Add tests.
 
 ---
 
-# Codex Prompt 6 — Image Generator
+# Codex Prompt 6 â€” Image Generator
 
 Create image_generator.py
 
@@ -200,7 +200,7 @@ Rules:
 
 ---
 
-# Codex Prompt 7 — PDF Layout Engine
+# Codex Prompt 7 â€” PDF Layout Engine
 
 Create pdf_builder.py using ReportLab and Pillow.
 
@@ -221,7 +221,7 @@ interior.pdf
 
 ---
 
-# Codex Prompt 8 — KDP Package Export
+# Codex Prompt 8 â€” KDP Package Export
 
 Generate:
 - cover_prompt.txt
@@ -240,7 +240,7 @@ kdp_upload_package.zip
 
 ---
 
-# Codex Prompt 9 — Quality Control
+# Codex Prompt 9 â€” Quality Control
 
 Create qc_checker.py
 
@@ -259,7 +259,7 @@ qc_report.md
 
 ---
 
-# Codex Prompt 10 — Final Polish
+# Codex Prompt 10 â€” Final Polish
 
 Add:
 - sidebar workflow
@@ -304,3 +304,4 @@ Create a series:
 - Vehicles
 
 Build a brand, not a single book.
+

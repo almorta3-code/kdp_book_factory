@@ -7,7 +7,7 @@ from pathlib import Path
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from src.config import get_settings
-from src.openai_client import get_openai_client
+from src.google_client import generate_structured
 
 
 class OpportunityScore(BaseModel):
@@ -74,45 +74,17 @@ Be direct and comparative. Explain why each niche scores where it does.
 
 
 def rank_opportunities(niches: list[str]) -> list[OpportunityScore]:
-    """Rank multiple workbook niches using structured OpenAI output."""
+    """Rank multiple workbook niches using structured Gemini output."""
     cleaned = [niche.strip() for niche in niches if niche.strip()]
     if len(cleaned) < 2:
         raise ValueError("Enter at least two niche ideas to compare.")
     if len(set(cleaned)) != len(cleaned):
         raise ValueError("Niche ideas must be unique.")
 
-    client = get_openai_client()
     settings = get_settings()
     system_prompt = _system_prompt()
     user_prompt = _user_prompt(cleaned)
-
-    responses_api = getattr(client, "responses", None)
-    if responses_api is not None and hasattr(responses_api, "parse"):
-        response = responses_api.parse(
-            model=settings.model_text_planner,
-            input=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            text_format=OpportunityRanking,
-        )
-        parsed = getattr(response, "output_parsed", None)
-        if parsed is None:
-            raise RuntimeError("OpenAI returned no parsed opportunity ranking.")
-        return parsed.opportunities
-
-    completion = client.beta.chat.completions.parse(
-        model=settings.model_text_planner,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        response_format=OpportunityRanking,
-    )
-    parsed = completion.choices[0].message.parsed
-    if parsed is None:
-        raise RuntimeError("OpenAI returned no parsed opportunity ranking.")
-    return parsed.opportunities
+    return generate_structured(settings.model_text_planner, system_prompt, user_prompt, OpportunityRanking).opportunities
 
 
 def _slugify(text: str) -> str:

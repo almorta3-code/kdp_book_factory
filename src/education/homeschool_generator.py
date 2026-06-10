@@ -12,7 +12,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
 from src.config import get_settings
-from src.openai_client import get_openai_client
+from src.google_client import generate_structured
 from src.schemas.book import BookBlueprint
 
 
@@ -92,37 +92,10 @@ extension ideas, and product positioning for selling this as a homeschool printa
 
 def generate_homeschool_pack(blueprint: BookBlueprint) -> HomeschoolPack:
     """Generate structured homeschool resources from a book blueprint."""
-    client = get_openai_client()
+    settings = get_settings()
     system_prompt = _system_prompt()
     user_prompt = _user_prompt(blueprint)
-
-    responses_api = getattr(client, "responses", None)
-    if responses_api is not None and hasattr(responses_api, "parse"):
-        response = responses_api.parse(
-            model=get_settings().model_text_fast,
-            input=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            text_format=HomeschoolPack,
-        )
-        parsed = getattr(response, "output_parsed", None)
-        if parsed is None:
-            raise RuntimeError("OpenAI returned no parsed HomeschoolPack.")
-        return parsed
-
-    completion = client.beta.chat.completions.parse(
-        model=get_settings().model_text_fast,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        response_format=HomeschoolPack,
-    )
-    parsed = completion.choices[0].message.parsed
-    if parsed is None:
-        raise RuntimeError("OpenAI returned no parsed HomeschoolPack.")
-    return parsed
+    return generate_structured(settings.model_text_fast, system_prompt, user_prompt, HomeschoolPack)
 
 
 TITLE_STYLE = ParagraphStyle("Title", fontName="Helvetica-Bold", fontSize=22, leading=28, alignment=1)

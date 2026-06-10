@@ -6,7 +6,7 @@ from pathlib import Path
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from src.config import get_settings
-from src.openai_client import get_openai_client
+from src.google_client import generate_structured
 
 
 class NicheResearchResult(BaseModel):
@@ -90,43 +90,15 @@ Return a structured niche research result with clear strengths, weaknesses, and 
 
 
 def analyze_niche(topic: str) -> NicheResearchResult:
-    """Analyze a workbook niche idea using structured OpenAI output."""
+    """Analyze a workbook niche idea using structured Gemini output."""
     cleaned_topic = topic.strip()
     if len(cleaned_topic) < 3:
         raise ValueError("Enter a niche idea with at least 3 characters.")
 
-    client = get_openai_client()
     settings = get_settings()
     system_prompt = _system_prompt()
     user_prompt = _user_prompt(cleaned_topic)
-
-    responses_api = getattr(client, "responses", None)
-    if responses_api is not None and hasattr(responses_api, "parse"):
-        response = responses_api.parse(
-            model=settings.model_text_planner,
-            input=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            text_format=NicheResearchResult,
-        )
-        parsed = getattr(response, "output_parsed", None)
-        if parsed is None:
-            raise RuntimeError("OpenAI returned no parsed niche research result.")
-        return parsed
-
-    completion = client.beta.chat.completions.parse(
-        model=settings.model_text_planner,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        response_format=NicheResearchResult,
-    )
-    parsed = completion.choices[0].message.parsed
-    if parsed is None:
-        raise RuntimeError("OpenAI returned no parsed niche research result.")
-    return parsed
+    return generate_structured(settings.model_text_planner, system_prompt, user_prompt, NicheResearchResult)
 
 
 def _slugify(text: str) -> str:

@@ -1,6 +1,6 @@
 # KDP Activity Book Factory
 
-A local Streamlit app for creating children's KDP activity workbook packages with OpenAI, structured planning, activity generators, image assets, PDF layout, quality checks, and export files.
+A local Streamlit app for creating children's KDP activity workbook packages with Google Gemini, structured planning, activity generators, image assets, PDF layout, quality checks, and export files.
 
 The app is designed for a non-coder workflow: open it, follow the sidebar steps, save your project, and export a ready-to-review upload package.
 
@@ -18,10 +18,13 @@ Copy-Item .env.example .env
 
 ## Add API Key
 
-Open `.env` and add your OpenAI API key:
+Create a Google AI Studio key at <https://aistudio.google.com/apikey>, then open `.env` and add it:
 
 ```text
-OPENAI_API_KEY=sk-your-key-here
+GOOGLE_API_KEY=your-google-ai-studio-key-here
+MODEL_TEXT_PLANNER=gemini-3.5-flash
+MODEL_TEXT_FAST=gemini-3.5-flash
+MODEL_IMAGE=gemini-3.1-flash-image
 ```
 
 The app can still make placeholder images without image API calls, but blueprint, content, and metadata generation need the API key.

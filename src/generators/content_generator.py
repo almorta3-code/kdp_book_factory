@@ -4,7 +4,7 @@ from pathlib import Path
 
 from src.config import get_settings
 from src.compliance.provenance_engine import record_prompt, update_project_provenance
-from src.openai_client import get_openai_client
+from src.google_client import generate_structured
 from src.schemas.book import AnimalUnit, BookBlueprint, ContentUnitBatch
 
 
@@ -58,52 +58,11 @@ If the topic is not an animal, put the topic name in animal_name and use habitat
 
 
 def _parse_structured_response(blueprint: BookBlueprint) -> ContentUnitBatch:
-    """Call OpenAI structured outputs and parse content units."""
+    """Call Gemini structured outputs and parse content units."""
     settings = get_settings()
-    client = get_openai_client()
     system_prompt = _build_system_prompt()
     user_prompt = _build_user_prompt(blueprint)
-
-    responses_api = getattr(client, "responses", None)
-    if responses_api is not None and hasattr(responses_api, "parse"):
-        response = responses_api.parse(
-            model=settings.model_text_fast,
-            input=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            text_format=ContentUnitBatch,
-        )
-        parsed = getattr(response, "output_parsed", None)
-        if parsed is None:
-            raise RuntimeError("OpenAI returned no parsed content units.")
-        try:
-            record_prompt(
-                "content_generator",
-                settings.model_text_fast,
-                f"{system_prompt}\n\n{user_prompt}",
-                f"Generated {len(parsed.units)} content units",
-            )
-            update_project_provenance(
-                book_title=blueprint.title,
-                model_used=settings.model_text_fast,
-                generation_event="Generated book content units",
-            )
-        except Exception:
-            pass
-        return parsed
-
-    completion = client.beta.chat.completions.parse(
-        model=settings.model_text_fast,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        response_format=ContentUnitBatch,
-    )
-    parsed = completion.choices[0].message.parsed
-    if parsed is None:
-        raise RuntimeError("OpenAI returned no parsed content units.")
+    parsed = generate_structured(settings.model_text_fast, system_prompt, user_prompt, ContentUnitBatch)
     try:
         record_prompt(
             "content_generator",

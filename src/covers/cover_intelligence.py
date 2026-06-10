@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from src.compliance.provenance_engine import record_prompt, update_project_provenance
 from src.config import get_settings
-from src.openai_client import get_openai_client
+from src.google_client import generate_structured
 
 
 class CoverConcept(BaseModel):
@@ -117,58 +117,19 @@ def generate_cover_concepts(niche: str, age_range: str, style: str) -> CoverConc
     if len(cleaned_style) < 3:
         raise ValueError("Enter a style direction.")
 
-    client = get_openai_client()
+    settings = get_settings()
     system_prompt = _system_prompt()
     user_prompt = _user_prompt(cleaned_niche, cleaned_age, cleaned_style)
-
-    responses_api = getattr(client, "responses", None)
-    if responses_api is not None and hasattr(responses_api, "parse"):
-        response = responses_api.parse(
-            model=get_settings().model_text_planner,
-            input=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            text_format=CoverConceptSet,
-        )
-        parsed = getattr(response, "output_parsed", None)
-        if parsed is None:
-            raise RuntimeError("OpenAI returned no parsed CoverConceptSet.")
-        try:
-            record_prompt(
-                "cover_intelligence",
-                get_settings().model_text_planner,
-                f"{system_prompt}\n\n{user_prompt}",
-                f"Generated 10 cover concepts for {parsed.niche}",
-            )
-            update_project_provenance(
-                model_used=get_settings().model_text_planner,
-                generation_event=f"Generated cover concepts for {parsed.niche}",
-            )
-        except Exception:
-            pass
-        return parsed
-
-    completion = client.beta.chat.completions.parse(
-        model=get_settings().model_text_planner,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        response_format=CoverConceptSet,
-    )
-    parsed = completion.choices[0].message.parsed
-    if parsed is None:
-        raise RuntimeError("OpenAI returned no parsed CoverConceptSet.")
+    parsed = generate_structured(settings.model_text_planner, system_prompt, user_prompt, CoverConceptSet)
     try:
         record_prompt(
             "cover_intelligence",
-            get_settings().model_text_planner,
+            settings.model_text_planner,
             f"{system_prompt}\n\n{user_prompt}",
             f"Generated 10 cover concepts for {parsed.niche}",
         )
         update_project_provenance(
-            model_used=get_settings().model_text_planner,
+            model_used=settings.model_text_planner,
             generation_event=f"Generated cover concepts for {parsed.niche}",
         )
     except Exception:
