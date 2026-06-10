@@ -1,0 +1,31 @@
+{
+  "page_number": 12,
+  "page_type": "word_search",
+  "title": "Ocean Words",
+  "content_blocks": [
+    {
+      "type": "instruction",
+      "text": "Find each ocean word in the puzzle."
+    }
+  ],
+  "required_assets": [],
+  "activity_data": {
+    "words": [
+      "WHALE",
+      "REEF",
+      "SHELL",
+      "WAVE",
+      "FISH"
+    ],
+    "grid_size": 10
+  },
+  "answer_key": {
+    "WHALE": [
+      [1, 2],
+      [1, 3],
+      [1, 4],
+      [1, 5],
+      [1, 6]
+    ]
+  }
+}

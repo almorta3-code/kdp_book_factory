@@ -1,0 +1,17 @@
+{
+  "theme": "Ocean Animals Adventure",
+  "age_min": 5,
+  "age_max": 7,
+  "trim_size": "8.5 x 11 in",
+  "page_count": 48,
+  "color_mode": "Black and white",
+  "activity_types": [
+    "Coloring pages",
+    "Mazes",
+    "Word searches",
+    "Dot-to-dot"
+  ],
+  "style_direction": "Cute bold outlines, friendly ocean animals, simple backgrounds, large activity spaces.",
+  "difficulty": "easy",
+  "language": "English"
+}

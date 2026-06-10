@@ -1,0 +1,19 @@
+{
+  "theme": "Desert Animals Workbook",
+  "age_min": 5,
+  "age_max": 7,
+  "trim_size": "8.5 x 11 in",
+  "page_count": 16,
+  "color_mode": "Black and white",
+  "activity_types": [
+    "Coloring pages",
+    "Mazes",
+    "Word searches",
+    "Dot-to-dot",
+    "Tracing",
+    "Simple puzzles"
+  ],
+  "style_direction": "Cute desert animal characters, clean bold outlines, simple cactus and sand details, friendly educational tone.",
+  "difficulty": "easy",
+  "language": "English"
+}

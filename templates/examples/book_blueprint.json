@@ -1,0 +1,60 @@
+{
+  "title": "Ocean Animals Adventure Activity Book",
+  "subtitle": "Mazes, Coloring, Word Searches, and Dot-to-Dot Fun",
+  "audience": "Children ages 5 to 7 who enjoy friendly animals and early learning puzzles.",
+  "promise": "A playful workbook that keeps children practicing observation, vocabulary, counting, and pencil control.",
+  "unique_angle": "Each animal introduces a tiny story moment before the activity, making the workbook feel like a journey through the ocean.",
+  "animal_or_topic_list": [
+    "Dolphin",
+    "Sea Turtle",
+    "Octopus",
+    "Clownfish",
+    "Whale"
+  ],
+  "page_plan": [
+    {
+      "page_number": 1,
+      "page_type": "intro",
+      "title": "Welcome to the Ocean",
+      "content_blocks": [
+        {
+          "type": "short_text",
+          "text": "Meet friendly ocean animals and solve activities as you explore."
+        }
+      ],
+      "required_assets": [],
+      "activity_data": {},
+      "answer_key": null
+    },
+    {
+      "page_number": 2,
+      "page_type": "maze",
+      "title": "Help the Turtle Find the Reef",
+      "content_blocks": [
+        {
+          "type": "instruction",
+          "text": "Draw a path from the turtle to the coral reef."
+        }
+      ],
+      "required_assets": [
+        "sea_turtle_line_art"
+      ],
+      "activity_data": {
+        "grid_size": 12,
+        "start": "top_left",
+        "end": "bottom_right"
+      },
+      "answer_key": {
+        "solution_asset": "page_002_maze_solution.svg"
+      }
+    }
+  ],
+  "activity_mix": {
+    "coloring": 16,
+    "maze": 10,
+    "word_search": 8,
+    "dot_to_dot": 8
+  },
+  "visual_style": "Clean black-and-white line art with thick outlines, cheerful animal expressions, and minimal interior detail.",
+  "kdp_positioning": "Position as an ocean animals activity workbook for early elementary children, emphasizing screen-free fun and beginner-friendly puzzles."
+}

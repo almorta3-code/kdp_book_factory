@@ -1,0 +1,53 @@
+{
+  "animal_name": "Sea Turtle",
+  "habitat": "Warm oceans, coral reefs, and sandy beaches.",
+  "diet": "Sea grass, jellyfish, algae, and small sea creatures.",
+  "fun_facts": [
+    "Sea turtles can travel very long distances through the ocean.",
+    "Baby sea turtles hatch from eggs buried in warm sand.",
+    "Some sea turtles can hold their breath for several hours while resting."
+  ],
+  "short_story": "Tilly the sea turtle woke up beside a bright coral reef. She stretched her flippers, waved to a passing fish, and began her slow swim toward breakfast.",
+  "vocabulary_words": [
+    "turtle",
+    "reef",
+    "flipper",
+    "shell",
+    "ocean"
+  ],
+  "activity_ideas": [
+    "Maze from beach to reef",
+    "Coloring page with coral",
+    "Trace the word turtle"
+  ],
+  "image_prompts": [
+    "Black-and-white children's coloring page of a smiling sea turtle swimming near simple coral, thick clean outlines, no shading."
+  ],
+  "quiz_questions": [
+    {
+      "question": "Where do many sea turtles lay their eggs?",
+      "answer": "On sandy beaches."
+    },
+    {
+      "question": "What hard body part helps protect a sea turtle?",
+      "answer": "Its shell."
+    }
+  ],
+  "matching_pairs": [
+    {
+      "left": "shell",
+      "right": "hard cover on a turtle's back"
+    },
+    {
+      "left": "reef",
+      "right": "a busy ocean home for sea life"
+    }
+  ],
+  "tracing_words": [
+    "turtle",
+    "shell",
+    "reef"
+  ],
+  "coloring_page_prompt": "Black-and-white coloring page of a smiling sea turtle swimming over simple coral shapes, thick outlines, open spaces, no shading.",
+  "flashcard_text": "Sea Turtle: A gentle ocean animal with flippers and a hard shell."
+}

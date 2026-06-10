@@ -1,0 +1,307 @@
+{
+  "title": "Desert Animal Discovery Workbook",
+  "subtitle": "Coloring, Mazes, Word Games, and Simple Facts for Curious Kids",
+  "audience": "Children ages 5 to 7 who enjoy animals, nature facts, and beginner activity pages.",
+  "promise": "A friendly desert-themed workbook that builds vocabulary, pencil control, observation, and early problem-solving skills.",
+  "unique_angle": "Each desert animal becomes a guide through a sunny discovery trail, combining simple science facts with playful workbook activities.",
+  "animal_or_topic_list": [
+    "Fennec Fox",
+    "Camel",
+    "Desert Tortoise",
+    "Meerkat"
+  ],
+  "page_plan": [
+    {
+      "page_number": 1,
+      "page_type": "intro",
+      "title": "Welcome to the Desert",
+      "content_blocks": [
+        {
+          "type": "intro",
+          "text": "Meet desert animals and solve fun activities."
+        }
+      ],
+      "required_assets": [],
+      "activity_data": {
+        "topic": "desert"
+      },
+      "answer_key": null
+    },
+    {
+      "page_number": 2,
+      "page_type": "story",
+      "title": "Fennec Fox Story",
+      "content_blocks": [
+        {
+          "type": "story",
+          "text": "Read about a tiny fox with big ears."
+        }
+      ],
+      "required_assets": [
+        "fennec_fox_character"
+      ],
+      "activity_data": {
+        "topic": "Fennec Fox"
+      },
+      "answer_key": null
+    },
+    {
+      "page_number": 3,
+      "page_type": "maze",
+      "title": "Help the Fox Find Shade",
+      "content_blocks": [
+        {
+          "type": "instruction",
+          "text": "Draw a path to the cool cactus shade."
+        }
+      ],
+      "required_assets": [],
+      "activity_data": {
+        "difficulty": "easy"
+      },
+      "answer_key": {
+        "solution": "See generated maze path."
+      }
+    },
+    {
+      "page_number": 4,
+      "page_type": "coloring",
+      "title": "Color the Fennec Fox",
+      "content_blocks": [
+        {
+          "type": "instruction",
+          "text": "Color the friendly fox."
+        }
+      ],
+      "required_assets": [
+        "fennec_fox_coloring"
+      ],
+      "activity_data": {
+        "topic": "Fennec Fox"
+      },
+      "answer_key": null
+    },
+    {
+      "page_number": 5,
+      "page_type": "story",
+      "title": "Camel Story",
+      "content_blocks": [
+        {
+          "type": "story",
+          "text": "Read about a calm camel crossing the sand."
+        }
+      ],
+      "required_assets": [
+        "camel_character"
+      ],
+      "activity_data": {
+        "topic": "Camel"
+      },
+      "answer_key": null
+    },
+    {
+      "page_number": 6,
+      "page_type": "word_search",
+      "title": "Camel Word Search",
+      "content_blocks": [
+        {
+          "type": "instruction",
+          "text": "Find the desert words."
+        }
+      ],
+      "required_assets": [],
+      "activity_data": {
+        "grid_size": 10
+      },
+      "answer_key": {
+        "solution": "See generated word paths."
+      }
+    },
+    {
+      "page_number": 7,
+      "page_type": "coloring",
+      "title": "Color the Camel",
+      "content_blocks": [
+        {
+          "type": "instruction",
+          "text": "Color the camel and the sand dunes."
+        }
+      ],
+      "required_assets": [
+        "camel_coloring"
+      ],
+      "activity_data": {
+        "topic": "Camel"
+      },
+      "answer_key": null
+    },
+    {
+      "page_number": 8,
+      "page_type": "story",
+      "title": "Desert Tortoise Story",
+      "content_blocks": [
+        {
+          "type": "story",
+          "text": "Read about a slow tortoise in the warm desert."
+        }
+      ],
+      "required_assets": [
+        "tortoise_character"
+      ],
+      "activity_data": {
+        "topic": "Desert Tortoise"
+      },
+      "answer_key": null
+    },
+    {
+      "page_number": 9,
+      "page_type": "dot_to_dot",
+      "title": "Dot-to-Dot Tortoise",
+      "content_blocks": [
+        {
+          "type": "instruction",
+          "text": "Connect the numbers to reveal the tortoise."
+        }
+      ],
+      "required_assets": [],
+      "activity_data": {
+        "points": 24
+      },
+      "answer_key": {
+        "solution": "Connect points in number order."
+      }
+    },
+    {
+      "page_number": 10,
+      "page_type": "tracing",
+      "title": "Trace Desert Words",
+      "content_blocks": [
+        {
+          "type": "instruction",
+          "text": "Trace each desert word carefully."
+        }
+      ],
+      "required_assets": [],
+      "activity_data": {
+        "practice": "tracing"
+      },
+      "answer_key": null
+    },
+    {
+      "page_number": 11,
+      "page_type": "coloring",
+      "title": "Color the Desert Tortoise",
+      "content_blocks": [
+        {
+          "type": "instruction",
+          "text": "Color the tortoise shell."
+        }
+      ],
+      "required_assets": [
+        "tortoise_coloring"
+      ],
+      "activity_data": {
+        "topic": "Desert Tortoise"
+      },
+      "answer_key": null
+    },
+    {
+      "page_number": 12,
+      "page_type": "story",
+      "title": "Meerkat Story",
+      "content_blocks": [
+        {
+          "type": "story",
+          "text": "Read about a meerkat watching from a sandy hill."
+        }
+      ],
+      "required_assets": [
+        "meerkat_character"
+      ],
+      "activity_data": {
+        "topic": "Meerkat"
+      },
+      "answer_key": null
+    },
+    {
+      "page_number": 13,
+      "page_type": "matching",
+      "title": "Match Desert Words",
+      "content_blocks": [
+        {
+          "type": "instruction",
+          "text": "Draw a line to match each word to its meaning."
+        }
+      ],
+      "required_assets": [],
+      "activity_data": {
+        "pairs": 4
+      },
+      "answer_key": {
+        "solution": "See generated matching pairs."
+      }
+    },
+    {
+      "page_number": 14,
+      "page_type": "quiz",
+      "title": "Desert Animal Quiz",
+      "content_blocks": [
+        {
+          "type": "instruction",
+          "text": "Circle the correct answer."
+        }
+      ],
+      "required_assets": [],
+      "activity_data": {
+        "questions": 4
+      },
+      "answer_key": {
+        "solution": "See generated quiz key."
+      }
+    },
+    {
+      "page_number": 15,
+      "page_type": "answer_key",
+      "title": "Answer Key",
+      "content_blocks": [
+        {
+          "type": "answers",
+          "text": "Check your work."
+        }
+      ],
+      "required_assets": [],
+      "activity_data": {
+        "section": "answers"
+      },
+      "answer_key": null
+    },
+    {
+      "page_number": 16,
+      "page_type": "blank",
+      "title": "Certificate",
+      "content_blocks": [
+        {
+          "type": "certificate",
+          "text": "Celebrate finishing the workbook."
+        }
+      ],
+      "required_assets": [],
+      "activity_data": {
+        "section": "certificate"
+      },
+      "answer_key": null
+    }
+  ],
+  "activity_mix": {
+    "story": 4,
+    "coloring": 3,
+    "maze": 1,
+    "word_search": 1,
+    "dot_to_dot": 1,
+    "tracing": 1,
+    "matching": 1,
+    "quiz": 1
+  },
+  "visual_style": "Black-and-white friendly line art with rounded animal shapes, simple desert plants, large open coloring areas, and cheerful expressions.",
+  "kdp_positioning": "A desert animals activity workbook for ages 5 to 7, positioned around screen-free learning, beginner puzzles, animal facts, and cute nature exploration."
+}
