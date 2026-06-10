@@ -25,7 +25,8 @@ def get_google_client() -> genai.Client:
 
 def generate_text(model: str, system_prompt: str, user_prompt: str) -> str:
     """Generate plain text with Gemini."""
-    response = get_google_client().models.generate_content(
+    client = get_google_client()
+    response = client.models.generate_content(
         model=model,
         contents=f"{system_prompt}\n\n{user_prompt}",
     )
@@ -36,7 +37,8 @@ def generate_text(model: str, system_prompt: str, user_prompt: str) -> str:
 
 def generate_structured(model: str, system_prompt: str, user_prompt: str, schema: type[T]) -> T:
     """Generate JSON with Gemini and validate it against a Pydantic model."""
-    response = get_google_client().models.generate_content(
+    client = get_google_client()
+    response = client.models.generate_content(
         model=model,
         contents=f"{system_prompt}\n\n{user_prompt}",
         config=types.GenerateContentConfig(
@@ -54,7 +56,8 @@ def generate_image_file(model: str, prompt: str, output_path: str | Path) -> Pat
     target_path = Path(output_path)
     target_path.parent.mkdir(parents=True, exist_ok=True)
 
-    response = get_google_client().models.generate_content(
+    client = get_google_client()
+    response = client.models.generate_content(
         model=model,
         contents=[prompt],
         config=types.GenerateContentConfig(response_modalities=["TEXT", "IMAGE"]),
